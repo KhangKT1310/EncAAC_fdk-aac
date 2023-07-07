@@ -31,5 +31,22 @@
     make clean 
     make lib
 
+### Example :
+
+    unsigned int outputBuffer[4096] = {0};
+	int outputSize = 0;
+
+	if (aacEncInit(16000,16,1))
+	{
+	    printf("aac init fail \n");
+	}
+
+    while(1)
+    {
+        outputSize = aacEncode(buffer->vm_addr, buffer->bytesused, outputBuffer);
+    }
+
+	aacEncEnd();
+
 
 
