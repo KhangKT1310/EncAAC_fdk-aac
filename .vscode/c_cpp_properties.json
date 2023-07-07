@@ -1,0 +1,17 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/media/khangkt/Work/Workspace/FPT_Telecom/fss_project/realtek/sdk/RTS3918N/rts39xx_sdk_v5.0.1/out/rts3918n_base/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c11",
+            "cppStandard": "gnu++14",
+            "intelliSenseMode": "linux-gcc-x64"
+        }
+    ],
+    "version": 4
+}
