@@ -1,7 +1,7 @@
 VERSION=1.0.0
 # linux
 TOOLS_DIR	=
-NAME_LIB	= mtce_aac.a
+NAME_LIB	= libaac.a
 OPTIMIZE	= -Wall -O2
 PROJECT_DIR = $(PWD)
 -include $(PROJECT_DIR)/Makefile.sdk.conf
@@ -25,7 +25,7 @@ CFLAGS += $(OPTIMIZE)
 CFLAGS +=$(FLAG_HAVE)
 
 
-lib: create $(NAME_LIB)
+lib: create $(OBJ_DIR)/$(NAME_LIB)
 
 create:
 	@mkdir -p $(OBJ_DIR)
@@ -33,22 +33,21 @@ create:
 
 clean:
 	rm -rf $(OBJ_DIR)
-	rm -rf $(NAME_LIB)
 
 install:
-	sudo cp -r $(NAME_LIB) $(INSTALL_DIR)
+	sudo cp -r $(OBJ_DIR)/$(NAME_LIB) $(INSTALL_DIR)
 
 
 
-$(NAME_LIB): $(OBJ) 
-	@echo "--Compiling '${STATIC_LIB} build release'..."
-	@$(AR) rcs ${NAME_LIB} ${OBJ}
+$(OBJ_DIR)/$(NAME_LIB): $(OBJ) 
+	@echo $(GREEN) "--Compiling '${STATIC_LIB} build release'..." $(NONE)
+	@$(AR) rcs $(OBJ_DIR)/$(NAME_LIB) ${OBJ}
 
 $(OBJ_DIR)/%.o: %.cpp
-	@echo $(GREEN) CPP  $< $(NONE)
+	@echo  $(GREEN) $(CPP) $< $(NONE)
 	@$(CPP) -o $@ -c $< $(CFLAGS)
 
 $(OBJ_DIR)/%.o: %.c aac.h
-	@echo $(GREEN) CC  $< $(NONE)
+	@echo $(GREEN)$(CPP)  $< $(NONE)
 	@$(CC) -o $@ -c $< $(CFLAGS)
 

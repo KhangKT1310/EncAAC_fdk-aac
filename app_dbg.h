@@ -1,10 +1,4 @@
-/**
- ******************************************************************************
- * @author: PND
- * @date:   04/09/2018
- * @brief: debug mt function
- ******************************************************************************
-**/
+
 #ifndef __MT_DBG_H__
 #define __MT_DBG_H__
 
@@ -12,9 +6,6 @@
 
 #define MT_MSG_DBG_EN				0
 #define MT_TIMER_DBG_EN				0
-
-//extern void APP_PRINT(const char *fmt, ...);
-
 
 #define DEBUG
 #ifdef DEBUG

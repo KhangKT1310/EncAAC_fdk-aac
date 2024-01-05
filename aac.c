@@ -4,39 +4,36 @@
 
 #include "app_dbg.h"
 #include "aac.h"
-
 #include <fdk-aac/aacenc_lib.h>
 
-
-typedef struct AacContext
+typedef struct
 {
-    HANDLE_AACENCODER hAacEncoder;
-    int inBufferIdentifier;
-    int inputbufElsize;
-#define readMaxLen 4096
-    int outputIdentifier;
-    int outputbufElsize;
-    int outputBufferSize;
+	HANDLE_AACENCODER hAacEncoder;
+	int inBufferIdentifier;
+	int inputbufElsize;
+	int outputIdentifier;
+	int outputbufElsize;
+	int outputBufferSize;
 
-    AACENC_BufDesc inputBufDesc;
-    AACENC_BufDesc outputBufDesc;
-    AACENC_InArgs inputArgs;
-    AACENC_OutArgs outputArgs;
+	AACENC_BufDesc inputBufDesc;
+	AACENC_BufDesc outputBufDesc;
+	AACENC_InArgs inputArgs;
+	AACENC_OutArgs outputArgs;
 
-} AacCtx_t;
+} aacCtx_t;
 
-typedef struct parameterDict
+typedef struct 
 {
 	AACENC_PARAM param;
 	UINT value;
 
 } Dict_t;
 
-static AacCtx_t ctx; 
+static aacCtx_t ctx;
 
-int aacEncInit(uint32_t sampleRate,uint8_t bitFormat,uint8_t channel)
+int aacEncInit(uint32_t sampleRate, uint8_t bitFormat, uint8_t channel)
 {
-	memset(&ctx, '\0', sizeof(AacCtx_t));
+	memset(&ctx, '\0', sizeof(aacCtx_t));
 	AACENC_ERROR AAC_ERR = AACENC_OK;
 	Dict_t m_Dict[] =
 		{
@@ -51,7 +48,7 @@ int aacEncInit(uint32_t sampleRate,uint8_t bitFormat,uint8_t channel)
 	AAC_ERR = aacEncOpen(&ctx.hAacEncoder, 0x01, 0x02);
 	if (ctx.hAacEncoder == NULL || AAC_ERR != AACENC_OK)
 	{
-		APP_ERR("Error: aacEncOpen failed.\n");
+		APP_DBG("Error: aacEncOpen failed.\n");
 		return -1;
 	}
 	int i, j = sizeof(m_Dict) / sizeof(Dict_t);
@@ -62,7 +59,7 @@ int aacEncInit(uint32_t sampleRate,uint8_t bitFormat,uint8_t channel)
 		{
 			aacEncEnd(ctx);
 			ctx.hAacEncoder = NULL;
-			APP_ERR("Error: aacEncoder_SetParam Error %d \r\n", i);
+			APP_DBG("Error: aacEncoder_SetParam Error %d \r\n", i);
 			return -1;
 		}
 	}
@@ -70,14 +67,14 @@ int aacEncInit(uint32_t sampleRate,uint8_t bitFormat,uint8_t channel)
 	{
 		aacEncEnd(ctx);
 		ctx.hAacEncoder = NULL;
-		APP_ERR("Error: aacEncode test Error form aacEncInit\n");
+		APP_DBG("Error: aacEncode test Error form aacEncInit\n");
 		return -1;
 	}
 
 	ctx.inBufferIdentifier = IN_AUDIO_DATA;
 	ctx.inputBufDesc.bufferIdentifiers = &ctx.inBufferIdentifier;
 	ctx.inputbufElsize = 2;
-	ctx.inputBufDesc.bufElSizes =&ctx.inputbufElsize;
+	ctx.inputBufDesc.bufElSizes = &ctx.inputbufElsize;
 
 	ctx.outputbufElsize = 1;
 	ctx.outputBufDesc.bufElSizes = &ctx.outputbufElsize;
@@ -104,9 +101,6 @@ int aacEncode(void *pPCMdata, unsigned int PCMdatasize, void *pAACdata)
 
 	/* output argument */
 	memset((void *)&ctx.outputArgs, (int)'\0', sizeof(ctx.outputArgs));
-
-	/* encode */
-
 	if (aacEncEncode(ctx.hAacEncoder, &ctx.inputBufDesc, &ctx.outputBufDesc, &ctx.inputArgs, &ctx.outputArgs) != AACENC_OK)
 	{
 		APP_PRINT("aacEncEncode AACENC CODE output bytes:%d \r\n", ctx.outputArgs.numOutBytes);
